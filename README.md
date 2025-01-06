@@ -1,6 +1,8 @@
 # PathTracer_soft
 Path Tracer (software)
 
+### Current state screenshot
+![Screenshot Jan 05, 2025](/_screenshots/image_20250105.jpg)
 
 ## WIP side project (current state)
 ### Started 2025/01/05
