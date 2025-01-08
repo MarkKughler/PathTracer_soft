@@ -4,13 +4,13 @@
 #include "res/targetver.h"
 #include <Windows.h>
 #include "nublog.h"
-#include "util/vec3.h"
-#include "util/rgb.h"
-#include "ppm.h"
+#include "constants.h"
+#include "util/camera.h"
+#include "util/hitObject.h"
+#include "hitObject_list.h"
+#include "shapes/sphere.h"
 
-#ifdef NDEBUG
-int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _In_ LPSTR cmd_line, _In_ int cmd_show) {
-#else
+
 #include <crtdbg.h>
 #pragma comment(linker, "/SUBSYSTEM:CONSOLE")
 int main() {
@@ -19,11 +19,17 @@ int main() {
     _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
     //_CrtSetBreakAlloc(000);
     HINSTANCE instance = GetModuleHandle(0);
-#endif
-
-    int image_width = 256;
-    int image_height = 256;
-    WritePPM(image_width, image_height);
-
+    
+    // scene setup ----------------------------------------------
+    cHitObject_List world;
+    world.Add(make_shared<cSphere>(cVec3(0.0, 0.0, -1.0), 0.5));
+    world.Add(make_shared<cSphere>(cVec3(0.0, -100.5, -1.0), 100.0));
+   
+    cCamera camera;
+    camera.aspect_ratio = 16.0 / 9.0;
+    camera.image_width = 800;
+    camera.samples_per_pixel = 500;
+    camera.Render(world);
+    
     return 0;
 }
