@@ -2,11 +2,14 @@
 #include "../util/hitObject.h"
 
 
+
 class cSphere : public cHitObject
 {
 
 public:
-    cSphere(const cVec3& center, double radius) : center(center), radius(max(0.0, radius)) {}
+    cSphere(const cVec3& center, double radius, shared_ptr<cMaterialBase> mat) 
+        : center(center), radius(fmax(0.0, radius)), material(mat)
+    { }
 
     bool Hit(const cRay& ray, cInterval ray_t, sHitData& data) const override
     {
@@ -25,10 +28,13 @@ public:
             if (!ray_t.Surrounds(nearest_root))
                 return false;
         }
+
         data.t = nearest_root;
         data.pos = ray.at(data.t);
         cVec3 unit_outward_normal = (data.pos - center) / radius;
         data.SetFaceNormal(ray, unit_outward_normal);
+        data.mat = material;
+
         return true;
     }
 
@@ -36,5 +42,6 @@ private:
 
     cVec3 center;
     double radius;
+    shared_ptr<cMaterialBase> material;
 };
 

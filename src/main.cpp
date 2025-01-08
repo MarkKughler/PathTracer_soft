@@ -8,6 +8,7 @@
 #include "util/camera.h"
 #include "util/hitObject.h"
 #include "hitObject_list.h"
+#include "util/material.h"
 #include "shapes/sphere.h"
 
 
@@ -22,14 +23,25 @@ int main() {
     
     // scene setup ----------------------------------------------
     cHitObject_List world;
-    world.Add(make_shared<cSphere>(cVec3(0.0, 0.0, -1.0), 0.5));
-    world.Add(make_shared<cSphere>(cVec3(0.0, -100.5, -1.0), 100.0));
+    auto mat_ground  = make_shared<cLambertian>(cRGB(0.1f, 0.8f, 0.1f));
+    auto mat_midGray = make_shared<cLambertian>(cRGB(0.5f, 0.5f, 0.5f));
+    auto mat_metal   = make_shared<cMetalic>(cRGB(0.8f, 0.8f, 0.8f), 0.3);
+    auto mat_brass   = make_shared<cMetalic>(cRGB(0.8f, 0.6f, 0.2f), 1.0);
+
+    world.Add(make_shared<cSphere>(cVec3(0.0, -100.5, -1.0), 100.0, mat_ground));
+    world.Add(make_shared<cSphere>(cVec3(0.0, 0.0, -1.2), 0.5, mat_midGray));
+    world.Add(make_shared<cSphere>(cVec3(-1.0, 0.0, -1.0), 0.5, mat_metal));
+    world.Add(make_shared<cSphere>(cVec3(1.0, 0.0, -1.0), 0.5, mat_brass));
+    
    
     cCamera camera;
     camera.aspect_ratio = 16.0 / 9.0;
     camera.image_width = 800;
     camera.samples_per_pixel = 500;
+    camera.max_recursive_depth = 50;
     camera.Render(world);
     
     return 0;
 }
+
+//10.6

@@ -1,5 +1,6 @@
 #pragma once
 #include "hitObject.h"
+#include "material.h"
 
 class cCamera
 {
@@ -8,6 +9,7 @@ public:
     double aspect_ratio = 16.0 / 9.0;
     int image_width = 800;
     int samples_per_pixel = 10;
+    int max_recursive_depth = 10;
 
 
     void Render(const cHitObject& world)
@@ -26,13 +28,17 @@ public:
                 for (int sample = 0; sample < samples_per_pixel; ++sample)
                 {
                     cRay ray = GetRay(i, j);
-                    px_color += RayColor(ray, world);
+                    px_color += RayColor(ray, max_recursive_depth, world);
                 }
+
+                float r = linear_to_gamma(px_color.r * px_sample_scale);
+                float g = linear_to_gamma(px_color.g * px_sample_scale);
+                float b = linear_to_gamma(px_color.b * px_sample_scale);
                 
                 static const cInterval intensity(0.f, 0.999f);
-                std::cout << int(256.0 * intensity.clamp_t(px_color.r * px_sample_scale)) << ' '
-                          << int(256.0 * intensity.clamp_t(px_color.g * px_sample_scale)) << ' '
-                          << int(256.0 * intensity.clamp_t(px_color.b * px_sample_scale)) << ' ';
+                std::cout << int(256.0 * intensity.clamp_t(r)) << ' '
+                          << int(256.0 * intensity.clamp_t(g)) << ' '
+                          << int(256.0 * intensity.clamp_t(b)) << ' ';
             }
         }
         std::clog << "\rPPM file written to disk \n";
@@ -67,19 +73,28 @@ private:
     }
 
 
-    cRGB RayColor(const cRay& ray, const cHitObject& world) const
+    cRGB RayColor(const cRay& ray, int depth, const cHitObject& world) const
     {
+        if (depth <= 0) return cRGB(0.0, 0.0, 0.0);              // bounce limiter
+
         sHitData data;
-        if (world.Hit(ray, cInterval(0, infinity), data))
+        if (world.Hit(ray, cInterval(0.001, infinity), data)) 
         {
-            cVec3 direction = random_on_hemisphere(data.norm);
-            return 0.5f * RayColor(cRay(data.pos, direction), world);
-         //   cRGB norm_color = { data.norm.x, data.norm.y, data.norm.z };
-         //   return 0.5f * (norm_color + cRGB(1.f, 1.f, 1.f));
+            cRay scattered;
+            cRGB attenuation;
+            if (data.mat->Scatter(ray, data, attenuation, scattered))
+                return attenuation * RayColor(scattered, depth - 1, world);
+            return cRGB(0.f, 0.f, 0.f);
+
+            //cVec3 direction = random_on_hemisphere(data.norm); // naive lambert
+            //cVec3 direction = data.norm + random_unit_vector();  //  true lambert
+
+            //return 0.3f * RayColor(cRay(data.pos, direction), depth-1, world);
         }
+
         cVec3 unit_dir = unit_vector(ray.direction());
-        double a = 0.5f * (unit_dir.y + 1.0);
-        return (1.0 - a) * cRGB(1.0, 1.0, 1.0) + a * cRGB(0.5, 0.7, 1.0);
+        double a = 0.5 * (unit_dir.y + 1.0);
+        return (1.0 - a) * cRGB(1.0, 1.0, 1.0) + a * cRGB(0.4, 0.6, 1.0);
     }
 
 

@@ -36,6 +36,12 @@ public:
     double length() const { return std::sqrt(length_squared()); }
     double length_squared() const { return x*x + y*y + z*z; }
 
+    bool IsNearZero() const
+    {
+        double s = 1e-8;
+        return (std::fabs(x) < s) && (std::fabs(y) < s) && (std::fabs(z) < s);
+    }
+
     static cVec3 random()
     {
         return { rnd(), rnd(), rnd() };
@@ -117,4 +123,9 @@ inline cVec3 random_on_hemisphere(const cVec3& normal)
         return on_unit_sphere;
     else
         return -on_unit_sphere;
+}
+
+inline cVec3 Reflect(const cVec3& v, const cVec3& n)
+{
+    return v - 2.0 * dot(v, n) * n;
 }

@@ -1,9 +1,12 @@
 #pragma once
 
+class cMaterialBase;
+
 struct sHitData
 {
     cVec3 pos;
     cVec3 norm;
+    shared_ptr<cMaterialBase> mat;
     double t;
     bool front_face;
 

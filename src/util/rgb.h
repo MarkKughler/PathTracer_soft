@@ -32,6 +32,12 @@ public:
 
 };
 
+inline float linear_to_gamma(float linear_component)
+{
+    if (linear_component > 0.f)
+        return std::sqrtf(linear_component);
+    return 0.f;
+}
 
 inline std::ostream& operator << (std::ostream& out, const cRGB& rhs)
 {
