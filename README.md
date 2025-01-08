@@ -12,6 +12,8 @@ Path Tracer (software)
 * vec3 and rgb class setup
 * camera, antialias, randomized multi sample per pixel
 * diffuse with hemisphere lighting
+* lambert and metalic materials
+*
 
 ## Planned TODO
 * 
