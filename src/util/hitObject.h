@@ -7,12 +7,14 @@ struct sHitData
     cVec3 pos;
     cVec3 norm;
     shared_ptr<cMaterialBase> mat;
+    double u;
+    double v;
     double t;
     bool front_face;
 
     void SetFaceNormal(const cRay& ray, const cVec3& unit_outward_norm)
     {
-        front_face = dot(ray.direction(), unit_outward_norm) < 0;
+        front_face = dot(ray.Direction(), unit_outward_norm) < 0;
         norm = front_face ? unit_outward_norm : -unit_outward_norm;
     }
 };

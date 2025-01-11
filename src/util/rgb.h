@@ -32,7 +32,7 @@ public:
 
 };
 
-inline float linear_to_gamma(float linear_component)
+inline float LinearToGamma(float linear_component)
 {
     if (linear_component > 0.f)
         return std::sqrtf(linear_component);

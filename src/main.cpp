@@ -22,16 +22,31 @@ int main() {
     HINSTANCE instance = GetModuleHandle(0);
     
     // scene setup ----------------------------------------------
-    cHitObject_List world;
-    auto mat_ground  = make_shared<cLambertian>(cRGB(0.1f, 0.8f, 0.1f));
-    auto mat_midGray = make_shared<cLambertian>(cRGB(0.5f, 0.5f, 0.5f));
-    auto mat_metal   = make_shared<cMetalic>(cRGB(0.8f, 0.8f, 0.8f), 0.3);
-    auto mat_brass   = make_shared<cMetalic>(cRGB(0.8f, 0.6f, 0.2f), 1.0);
+    auto tex_solidDrkRed   = make_shared<cSolidColor>(cRGB(0.05f, 0.0f, 0.0f));
+    auto tex_solidDrkGray  = make_shared<cSolidColor>(cRGB(0.4f, 0.4f, 0.4f));
+    auto tex_checkered     = make_shared<cCheckerTexture>(0.32f, tex_solidDrkRed, tex_solidDrkGray);
+    
+    auto mat_checkered  = make_shared<cAlbedo>(tex_checkered);
+    auto mat_midGray    = make_shared<cLambertian>(cRGB(0.5f, 0.5f, 0.6f));
+    auto mat_glass      = make_shared<cDielectric>(1.41);
+    auto mat_bubble     = make_shared<cDielectric>(1.0 / 1.5);
+    auto mat_brass      = make_shared<cMetalic>(cRGB(0.8f, 0.6f, 0.2f), 0.7);
+    auto mat_steel      = make_shared<cMetalic>(cRGB(0.9f, 0.9f, 0.9f), 0.1);
+    auto mat_blueSteel  = make_shared<cMetalic>(cRGB(0.3f, 0.3f, 0.85f), 0.5);
 
-    world.Add(make_shared<cSphere>(cVec3(0.0, -100.5, -1.0), 100.0, mat_ground));
-    world.Add(make_shared<cSphere>(cVec3(0.0, 0.0, -1.2), 0.5, mat_midGray));
-    world.Add(make_shared<cSphere>(cVec3(-1.0, 0.0, -1.0), 0.5, mat_metal));
-    world.Add(make_shared<cSphere>(cVec3(1.0, 0.0, -1.0), 0.5, mat_brass));
+    cHitObject_List world;
+    world.Add(make_shared<cSphere>(cVec3(0.0, -700.0, -1.0), 700.0, mat_checkered)); // ground
+
+    world.Add(make_shared<cSphere>(cVec3(-1.25, 0.5, -1.0), 0.5, mat_glass));
+    world.Add(make_shared<cSphere>(cVec3(-1.25, 0.5, -1.0), 0.44, mat_bubble));
+    world.Add(make_shared<cSphere>(cVec3(0.0, 0.5, -1.2), 0.5, mat_midGray));
+    world.Add(make_shared<cSphere>(cVec3(1.1, 0.5, -1.0), 0.5, mat_brass));
+
+    world.Add(make_shared<cSphere>(cVec3(-1.2, 0.2, -0.05), 0.2, mat_steel));
+    world.Add(make_shared<cSphere>(cVec3(-0.8, 0.2, 0.45), 0.2, mat_blueSteel));
+    
+    world.Add(make_shared<cSphere>(cVec3(-0.2, 0.2, 0.6), 0.2, mat_glass));
+    world.Add(make_shared<cSphere>(cVec3(-0.2, 0.2, 0.6), 0.18, mat_bubble));
     
    
     cCamera camera;
@@ -39,9 +54,14 @@ int main() {
     camera.image_width = 800;
     camera.samples_per_pixel = 500;
     camera.max_recursive_depth = 50;
+    camera.vfov = 20.0;
+    camera.look_from = { -3.5, 1.0, 4.1 };
+    camera.look_at = { 0.0, 0.5, -1.2 };
+    camera.up = { 0.0, 1.0, 0.0 };
+    camera.defocus_angle = 0.6;
+    camera.focus_dist = 4.4;
     camera.Render(world);
     
     return 0;
 }
 
-//10.6

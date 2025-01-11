@@ -10,14 +10,14 @@ public:
     double y;
     double z;
 
-    cVec3() : x(0.0), y(0.0), z(0.0) {}
+    cVec3() : x(0), y(0), z(0) {}
     cVec3(double v0, double v1, double v2) : x(v0), y(v1), z(v2) {}
 
 
     cVec3  operator -  () const  { return cVec3(-x, -y, -z); }
-    cVec3& operator /= (double t) { return *this *= 1.0 / t;    }
+    cVec3& operator /= (double t) { return *this *= 1/t; }
 
-    cVec3& operator += (const cVec3 & vec)
+    cVec3& operator += (const cVec3 &vec)
     {
         x += vec.x;
         y += vec.y;
@@ -33,8 +33,8 @@ public:
         return *this;
     }
     
-    double length() const { return std::sqrt(length_squared()); }
-    double length_squared() const { return x*x + y*y + z*z; }
+    double Length() const { return std::sqrt(LengthSquared()); }
+    double LengthSquared() const { return x*x + y*y + z*z; }
 
     bool IsNearZero() const
     {
@@ -42,21 +42,21 @@ public:
         return (std::fabs(x) < s) && (std::fabs(y) < s) && (std::fabs(z) < s);
     }
 
-    static cVec3 random()
+    static cVec3 Random()
     {
-        return { rnd(), rnd(), rnd() };
+        return { Rnd(), Rnd(), Rnd() };
     }
 
-    static cVec3 random(float _min, float _max)
+    static cVec3 Random(double _min, double _max)
     {
-        return { rnd(_min, _max), rnd(_min, _max), rnd(_min, _max) };
+        return { Rnd(_min, _max), Rnd(_min, _max), Rnd(_min, _max) };
     }
 };
 
 
 inline std::ostream& operator << (std::ostream& out, const cVec3& rhs)
 {
-    return out << rhs.x << " " << rhs.y << " " << rhs.z;
+    return out << rhs.x << " " << rhs.y << " " << rhs.z << " ";
 }
 
 inline cVec3 operator + (const cVec3& lhs, const cVec3& rhs)
@@ -86,7 +86,7 @@ inline cVec3 operator * (const cVec3 lhs, double t)
 
 inline cVec3 operator / (const cVec3& lhs, double t)
 {
-    return (1.f / t) * lhs;
+    return (1/t) * lhs;
 }
 
 inline double dot(const cVec3& lhs, const cVec3& rhs)
@@ -103,23 +103,33 @@ inline cVec3 cross(const cVec3& lhs, const cVec3& rhs)
 
 inline cVec3 unit_vector(const cVec3& rhs)
 {
-    return rhs / rhs.length();
+    return rhs / rhs.Length();
+}
+
+inline cVec3 random_in_unit_disk()
+{
+    while (1)
+    {
+        cVec3 p = { Rnd(-1, 1), Rnd(-1, 1), 0 };
+        if (p.LengthSquared() < 1.0)
+            return p;
+    }
 }
 
 inline cVec3 random_unit_vector()
 {
     while (1)
     {
-        cVec3 p = { rnd(-1.0, 1.0), rnd(-1.0, 1.0), rnd(-1.0, 1.0) };
-        double lensq = p.length_squared();
-        if (1e-160 < lensq && lensq <= 1) return p / sqrt(lensq);
+        cVec3 p = cVec3::Random(-1, 1);
+        double lensq = p.LengthSquared();
+        if (1e-160 < lensq && lensq <= 1.0) return p / sqrt(lensq);
     }
 }
 
 inline cVec3 random_on_hemisphere(const cVec3& normal)
 {
     cVec3 on_unit_sphere = random_unit_vector();
-    if (dot(on_unit_sphere, normal) > 0.f)
+    if (dot(on_unit_sphere, normal) > 0.0)
         return on_unit_sphere;
     else
         return -on_unit_sphere;
@@ -127,5 +137,13 @@ inline cVec3 random_on_hemisphere(const cVec3& normal)
 
 inline cVec3 Reflect(const cVec3& v, const cVec3& n)
 {
-    return v - 2.0 * dot(v, n) * n;
+    return v - (2 * dot(v, n)) * n;
+}
+
+inline cVec3 Refract(const cVec3& uv, const cVec3& n, double etai_over_etat)
+{
+    double cos_theta = std::fmin(dot(-uv, n), 1.0);
+    cVec3 r_out_perp = etai_over_etat * (uv + cos_theta * n);
+    cVec3 r_out_parallel = -std::sqrt(std::fabs(1.0 - r_out_perp.LengthSquared())) * n;
+    return r_out_perp + r_out_parallel;
 }
