@@ -14,7 +14,7 @@ Path Tracer (software)
 * camera, antialias, randomized multi sample per pixel
 * diffuse with hemisphere lighting
 * lambert and metalic materials
-*
+* texture 2D 
 
 ## Planned TODO
 * 
