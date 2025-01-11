@@ -3,7 +3,7 @@ Path Tracer (software)
 
 ### Current state screenshot
 ![Screenshot Jan 07, 2025](/_screenshots/image_20250107.jpg)
-![Screenshot Jan 08, 2025](/_screenshots/image_20250108.jpg)
+![Screenshot Jan 09, 2025](/_screenshots/image_20250109.jpg)
 ![Screenshot Jan 11, 2025](/_screenshots/image_20250111.jpg)
 
 ## WIP side project (current state)
