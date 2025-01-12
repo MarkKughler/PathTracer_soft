@@ -1,4 +1,5 @@
 #pragma once
+#include "util/aabb.h"
 #include "util/hitObject.h"
 #include <vector>
 
@@ -33,5 +34,11 @@ public:
         }
         return hit_anything;
     }
+
+    cAABB GetBoundingBox() const override { return bbox; }
+
+private:
+    
+    cAABB bbox;
 
 };

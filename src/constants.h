@@ -27,6 +27,13 @@ inline double Rnd(double _min, double _max)
     return distribution(generator);
 }
 
+inline int Rnd(int _min, int _max)
+{
+    static std::uniform_int distribution(_min, _max);
+    static std::mt19937 generator;
+    return distribution(generator);
+}
+
 #include "util/rgb.h"
 #include "util/interval.h"
 #include "util/ray.h"

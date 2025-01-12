@@ -93,7 +93,7 @@ public:
 
     bool Scatter(const cRay& ray, const sHitData& data, cRGB& attenuation, cRay& scattered) const override
     {
-        attenuation = cRGB(1.0f, 1.0f, 1.0f);
+        attenuation = cRGB(1.0, 1.0, 1.0);
         double ri = data.front_face ? (1.0 / refraction_index) : refraction_index;
 
         cVec3 unit_direction = unit_vector(ray.Direction());

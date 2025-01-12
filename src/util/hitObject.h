@@ -1,5 +1,6 @@
 #pragma once
 
+class cAABB;
 class cMaterialBase;
 
 struct sHitData
@@ -26,5 +27,5 @@ class cHitObject
 public:
     virtual ~cHitObject() = default;
     virtual bool Hit(const cRay& ray, cInterval ray_t, sHitData& data) const = 0;
-
+    virtual cAABB GetBoundingBox() const = 0;
 };

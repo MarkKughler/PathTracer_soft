@@ -39,6 +39,8 @@ public:
         return true;
     }
 
+    cAABB GetBoundingBox() const override { return bbox; }
+
 private:
 
     static void SetUV(const cVec3& p, double& u, double& v)
@@ -55,5 +57,6 @@ private:
     cVec3 center;
     double radius;
     shared_ptr<cMaterialBase> material;
+    cAABB bbox;
 };
 

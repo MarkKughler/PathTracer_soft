@@ -110,7 +110,7 @@ inline cVec3 random_in_unit_disk()
 {
     while (1)
     {
-        cVec3 p = { Rnd(-1, 1), Rnd(-1, 1), 0 };
+        cVec3 p = { Rnd(-1.0, 1.0), Rnd(-1.0, 1.0), 0 };
         if (p.LengthSquared() < 1.0)
             return p;
     }
@@ -120,7 +120,7 @@ inline cVec3 random_unit_vector()
 {
     while (1)
     {
-        cVec3 p = cVec3::Random(-1, 1);
+        cVec3 p = cVec3::Random(-1.0, 1.0);
         double lensq = p.LengthSquared();
         if (1e-160 < lensq && lensq <= 1.0) return p / sqrt(lensq);
     }
