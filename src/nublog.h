@@ -54,8 +54,8 @@
 #define LOG_INFO(loc, info) std::cout << _ec(32) << "[Info] " << loc << " " << info << _ec(0) << std::endl
 #define LOG_INFO2(info, sz, x, y) std::cout << _ec(32) << "[Info] " << info << " " << sz << " (" << x << ", " << y << ")" << _ec(0) << std::endl
 #define LOG_INFO3(info, x, y, z) std::cout << _ec(32) << "[Info] " << info << " (" << x << ", " << y << ", " << z << ")" << _ec(0) << std::endl
-#define LOG_ERROR(loc, info) std::cout << _ec(41)_ec(30) << "[Error] " << loc << "    \n" << info << _ec(0) << std::endl
-#define LOG_WARN(loc, info) std::cout << _ec(43)_ec(30) << "[Warning] " << loc << "    \n" << info << _ec(0) << std::endl
+#define LOG_ERROR(loc, info) std::cout << _ec(41)_ec(30) << "[Error] " << loc << " " << info << _ec(0) << std::endl
+#define LOG_WARN(loc, info) std::cout << _ec(43)_ec(30) << "[Warning] " << loc << " " << info << _ec(0) << std::endl
 
 #define LOG_BLOCK_START std::cout << _ec(36)
 #define LOG_BLOCK_END std::cout << _ec(0) << std::endl

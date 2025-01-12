@@ -20,12 +20,17 @@ int main() {
     _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
     //_CrtSetBreakAlloc(000);
     HINSTANCE instance = GetModuleHandle(0);
-    
+
+
     // scene setup ----------------------------------------------
     auto tex_solidDrkRed   = make_shared<cSolidColor>(cRGB(0.05f, 0.0f, 0.0f));
     auto tex_solidDrkGray  = make_shared<cSolidColor>(cRGB(0.4f, 0.4f, 0.4f));
     auto tex_checkered     = make_shared<cCheckerTexture>(0.32f, tex_solidDrkRed, tex_solidDrkGray);
     
+    auto tex_earth = make_shared<cImageTexture>("uvgrid.jpg");
+    auto mat_earth = make_shared<cAlbedo>(tex_earth);
+
+
     auto mat_checkered  = make_shared<cAlbedo>(tex_checkered);
     auto mat_midGray    = make_shared<cLambertian>(cRGB(0.5f, 0.5f, 0.6f));
     auto mat_glass      = make_shared<cDielectric>(1.41);
@@ -40,7 +45,7 @@ int main() {
     world.Add(make_shared<cSphere>(cVec3(-1.25, 0.5, -1.0), 0.5, mat_glass));
     world.Add(make_shared<cSphere>(cVec3(-1.25, 0.5, -1.0), 0.44, mat_bubble));
     world.Add(make_shared<cSphere>(cVec3(0.0, 0.5, -1.2), 0.5, mat_midGray));
-    world.Add(make_shared<cSphere>(cVec3(1.1, 0.5, -1.0), 0.5, mat_brass));
+    world.Add(make_shared<cSphere>(cVec3(1.1, 0.5, -1.0), 0.5, mat_earth));
 
     world.Add(make_shared<cSphere>(cVec3(-1.2, 0.2, -0.05), 0.2, mat_steel));
     world.Add(make_shared<cSphere>(cVec3(-0.8, 0.2, 0.45), 0.2, mat_blueSteel));
@@ -59,9 +64,8 @@ int main() {
     camera.look_at = { 0.0, 0.5, -1.2 };
     camera.up = { 0.0, 1.0, 0.0 };
     camera.defocus_angle = 0.6;
-    camera.focus_dist = 4.4;
+    camera.focus_dist = 5.0;
     camera.Render(world);
     
     return 0;
 }
-
