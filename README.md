@@ -16,6 +16,7 @@ Path Tracer (software)
 * diffuse with hemisphere lighting
 * lambert and metalic materials
 * texture 2D 
+* perlin noise
 
 ## Planned TODO
 * 
