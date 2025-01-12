@@ -5,6 +5,7 @@ Path Tracer (software)
 ![Screenshot Jan 07, 2025](/_screenshots/image_20250107.jpg)
 ![Screenshot Jan 09, 2025](/_screenshots/image_20250109.jpg)
 ![Screenshot Jan 11, 2025](/_screenshots/image_20250111.jpg)
+![Screenshot Jan 12, 2025](/_screenshots/image_20250112.jpg)
 
 ## WIP side project (current state)
 ### Started 2025/01/05
