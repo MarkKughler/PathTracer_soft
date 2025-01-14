@@ -24,5 +24,3 @@ Path Tracer (software)
 * 
 
 
-
-After this toy tracer, moving to a VK implementation
